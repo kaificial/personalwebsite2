@@ -34,11 +34,14 @@ html {
 }
 
 body {
-    font-family: var(--font-courier), 'Courier Prime', 'Courier New', monospace;
+    font-family: var(--font-mono), "IBM Plex Mono", "Courier New", "Courier", monospace;
+    font-weight: 400;
     background-color: var(--bg-color);
     color: var(--text-color);
     line-height: 1.6;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 
     background-image:
         // vertical lines
@@ -59,6 +62,15 @@ body {
 
     // keeps the grid fixed when scrolling
     background-attachment: fixed;
+}
+
+main {
+    flex: 1;
+    width: 90%;
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 1.5rem 0;
+    padding-left: 1rem;
 }
 
 // smooth transitions 
@@ -85,6 +97,12 @@ textarea {
     font-size: inherit;
 }
 
+code,
+kbd,
+pre {
+    font-family: var(--font-mono), 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
 .sr-only {
     position: absolute;
     width: 1px;
@@ -100,14 +118,14 @@ textarea {
 // header styles
 .header {
     width: 100%;
-    padding: 2rem 0;
+    padding: 2.5rem 0;
     display: flex;
     justify-content: center;
 }
 
 .header-container {
     width: 90%;
-    max-width: 1100px;
+    max-width: 650px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -119,30 +137,32 @@ textarea {
 }
 
 .nav-link {
-    padding: 0.5rem 0.9rem;
-    font-size: 0.9rem;
+    padding: 0.55rem 1rem;
+    font-size: 1rem;
     font-weight: 500;
     color: var(--text-color);
     background-color: var(--bg-color);
-    border: 1px solid var(--grid-color);
-    border-radius: 12px;
+    border: 1px solid transparent;
+    border-radius: 10px;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    line-height: normal;
 
     // very subtle shadow
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 
     &:hover {
         transform: translateY(-1px);
-        border-color: rgba(0, 0, 0, 0.1);
+        border-color: var(--grid-color);
     }
 
     &.active {
         background-color: white;
         color: #1c1917;
-        border-color: rgba(0, 0, 0, 0.05);
+        border-color: transparent;
         box-shadow:
             0 4px 6px -1px rgba(0, 0, 0, 0.05),
             0 2px 4px -1px rgba(0, 0, 0, 0.03);
@@ -153,7 +173,7 @@ textarea {
 .dark {
     .nav-link {
         background-color: #121212;
-        border-color: rgba(255, 255, 255, 0.1);
+        border-color: transparent;
         color: rgba(255, 255, 255, 0.8);
 
         &:hover {
@@ -175,11 +195,11 @@ textarea {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     background-color: var(--bg-color);
-    border: 1px solid var(--grid-color);
-    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
     color: var(--text-color);
     cursor: pointer;
     transition: all 0.2s ease;
@@ -187,7 +207,7 @@ textarea {
 
     &:hover {
         transform: translateY(-1px);
-        border-color: rgba(0, 0, 0, 0.1);
+        border-color: rgba(0, 0, 0, 0.2);
     }
 
     .moon-icon {

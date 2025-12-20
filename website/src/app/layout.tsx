@@ -1,14 +1,19 @@
 
 import type { Metadata } from "next";
-import { Courier_Prime } from "next/font/google";
+import { Inter, IBM_Plex_Mono } from "next/font/google";
 import "../styles/globals.scss";
 import Header from "../components/Header";
 
-// courier prime for that typewriter look
-const courierPrime = Courier_Prime({
-    weight: ["400", "700"],
+const inter = Inter({
     subsets: ["latin"],
-    variable: "--font-courier",
+    variable: "--font-inter",
+    weight: ["300", "400", "500", "600", "700"],
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+    subsets: ["latin"],
+    variable: "--font-mono",
+    weight: ["400"],
 });
 
 // site metadata for SEO and social sharing
@@ -37,9 +42,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en" className="dark">
-            <body className={courierPrime.variable}>
+            <body className={`${inter.variable} ${ibmPlexMono.variable}`}>
                 <Header />
-                <main className="min-h-screen">
+                <main>
                     {children}
                 </main>
             </body>
