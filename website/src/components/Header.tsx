@@ -17,46 +17,81 @@ const navLinks = [
 export default function Header() {
     const pathname = usePathname();
     const { isDark, toggleTheme } = useTheme();
+
+    // State for local display and hover
     const [count, setCount] = useState(0);
     const [displayCount, setDisplayCount] = useState(0);
     const [isHovered, setIsHovered] = useState(false);
-    const [isLiked, setIsLiked] = useState(false);
 
-    // Initial count state from localStorage
+    // State for global count and user's specific like status
+    const [hasLiked, setHasLiked] = useState(false);
+
+    // Initial count state from API
     useEffect(() => {
-        const savedCount = localStorage.getItem("love-count");
-        if (savedCount) {
-            const finalCount = parseInt(savedCount);
-            setCount(finalCount);
-
-            setDisplayCount(0);
-
-            // Animate from 0 to finalCount
-            const duration = 2400;
-            const startTime = performance.now() + 500; // Start after 500ms
-
-            const animate = (currentTime: number) => {
-                if (currentTime < startTime) {
-                    requestAnimationFrame(animate);
-                    return;
-                }
-
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-
-                const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
-                const currentDisplay = Math.floor(easeOutQuart(progress) * finalCount);
-
-                setDisplayCount(currentDisplay);
-
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                }
-            };
-
-            requestAnimationFrame(animate);
+        const savedLikeStatus = localStorage.getItem("has-liked-site");
+        if (savedLikeStatus === "true") {
+            setHasLiked(true);
         }
+
+        const fetchGlobalCount = async () => {
+            try {
+                const response = await fetch('/api/likes');
+                const data = await response.json();
+                const globalCount = data.count || 0;
+
+                setCount(globalCount);
+                setDisplayCount(0);
+
+                // Animate from 0 to globalCount
+                const duration = 2400;
+                const startTime = performance.now() + 500;
+
+                const animate = (currentTime: number) => {
+                    if (currentTime < startTime) {
+                        requestAnimationFrame(animate);
+                        return;
+                    }
+
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
+                    const currentDisplay = Math.floor(easeOutQuart(progress) * globalCount);
+
+                    setDisplayCount(currentDisplay);
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    }
+                };
+
+                requestAnimationFrame(animate);
+            } catch (error) {
+                console.error("Failed to sync global likes:", error);
+            }
+        };
+
+        fetchGlobalCount();
     }, []);
+
+    const handleLikeClick = async () => {
+        // Optimistic update locally
+        const newCount = count + 1;
+        setCount(newCount);
+        setDisplayCount(newCount);
+        setHasLiked(true);
+        localStorage.setItem("has-liked-site", "true");
+
+        try {
+            const response = await fetch('/api/likes', { method: 'POST' });
+            const data = await response.json();
+            if (data.count) {
+                setCount(data.count);
+                setDisplayCount(data.count);
+            }
+        } catch (error) {
+            console.error("Failed to sync like to server:", error);
+        }
+    };
 
     return (
         <header className="header">
@@ -123,13 +158,7 @@ export default function Header() {
                         </AnimatePresence>
 
                         <motion.button
-                            onClick={() => {
-                                const newCount = count + 1;
-                                setCount(newCount);
-                                setDisplayCount(newCount);
-                                setIsLiked(true);
-                                localStorage.setItem("love-count", newCount.toString());
-                            }}
+                            onClick={handleLikeClick}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -142,20 +171,20 @@ export default function Header() {
                                 height: '40px',
                                 padding: '0 12px',
                                 backgroundColor: isDark ? '#171717' : '#f9fafb',
-                                border: `1px solid ${isLiked ? (isDark ? 'rgba(37, 99, 235, 0.4)' : 'rgba(37, 99, 235, 0.3)') : (isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)')}`,
+                                border: `1px solid ${hasLiked ? (isDark ? 'rgba(37, 99, 235, 0.4)' : 'rgba(37, 99, 235, 0.3)') : (isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)')}`,
                                 borderRadius: '10px',
-                                color: isLiked ? '#2563eb' : (isDark ? '#94a3b8' : '#64748b'),
+                                color: hasLiked ? '#2563eb' : (isDark ? '#94a3b8' : '#64748b'),
                                 cursor: 'pointer',
                                 fontSize: '0.875rem',
                                 fontWeight: '600',
-                                boxShadow: isLiked ? '0 2px 10px rgba(37, 99, 235, 0.15)' : '0 1px 2px rgba(0, 0, 0, 0.04)',
+                                boxShadow: hasLiked ? '0 2px 10px rgba(37, 99, 235, 0.15)' : '0 1px 2px rgba(0, 0, 0, 0.04)',
                                 transition: 'all 0.2s ease'
                             }}
                         >
                             <Flame
                                 size={16}
-                                color={isLiked ? "#2563eb" : (isDark ? "#94a3b8" : "#64748b")}
-                                fill={isLiked ? "#2563eb" : "none"}
+                                color={hasLiked ? "#2563eb" : (isDark ? "#94a3b8" : "#64748b")}
+                                fill={hasLiked ? "#2563eb" : "none"}
                             />
                             {displayCount}
                         </motion.button>
