@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     title: "Kai Kim",
     keywords: ["Kai Kim", "software developer", "portfolio", "web developer", "React", "Next.js"],
     authors: [{ name: "Kai Kim" }],
+    icons: {
+        icon: '/assets/BlueSuitInvincible.png',
+    },
     openGraph: {
         title: "Kai Kim",
         description: "Hey! I'm Kai",
