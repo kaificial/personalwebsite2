@@ -277,11 +277,11 @@ pre {
     align-items: center !important;
     gap: 4px !important;
     padding: 6px 12px !important; // increased from 3px 10px
-    background-color: #3b82f6 !important; // solid blue background
-    border: none !important;
+    background-color: #DBEAFE !important;
+    border: 1px solid #BFDBFE !important;
     border-radius: 9999px !important;
     font-size: 1rem !important;
-    color: white !important; // white text
+    color: #1E40AF !important;
     font-weight: 500 !important;
     white-space: nowrap !important;
     flex-shrink: 0 !important;
@@ -294,8 +294,9 @@ pre {
 }
 
 .dark .location-pill {
-    background-color: #2563eb !important; // slightly darker blue in dark mode
-    color: white !important;
+    background-color: #1E3A8A !important;
+    color: #BFDBFE !important;
+    border: 1px solid #1D4ED8 !important;
 }
 
 // Hero layout styling - two column layout on all screens
@@ -323,7 +324,7 @@ pre {
 .hero-image-container {
     display: flex;
     align-items: start;
-    justify-content: center;
+    justify-content: flex-end;
     min-height: 200px;
 
     @media (min-width: 640px) {
