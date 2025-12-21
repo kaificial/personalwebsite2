@@ -36,8 +36,7 @@ export const metadata: Metadata = {
 /*
  * Main layout component
  * 
- * we're setting html to "dark" class by default since dark mode looks better imo
- * Users can toggle it if they like light mode
+ * The script checks localStorage first, then uses the users system preference
  */
 export default function RootLayout({
     children,
@@ -45,7 +44,31 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className="dark">
+        <html lang="en" suppressHydrationWarning>
+            <head>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            (function() {
+                                // Check localStorage for saved theme preference
+                                const savedTheme = localStorage.getItem('theme');
+                                
+                                if (savedTheme) {
+                                    // Use saved preference
+                                    if (savedTheme === 'dark') {
+                                        document.documentElement.classList.add('dark');
+                                    }
+                                } else {
+                                    // First visit - check system preference
+                                    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                                        document.documentElement.classList.add('dark');
+                                    }
+                                }
+                            })();
+                        `,
+                    }}
+                />
+            </head>
             <body className={`${inter.variable} ${ibmPlexMono.variable}`}>
                 <ThemeProvider>
                     <Header />
