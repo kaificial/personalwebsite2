@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTheme } from "./ThemeContext";
 
 // nav links for the header
 const navLinks = [
@@ -13,26 +14,7 @@ const navLinks = [
 
 export default function Header() {
     const pathname = usePathname();
-    // starts with whatever is in the html class
-    const [isDark, setIsDark] = useState(true);
-
-    // sync with the html class on mount
-    useEffect(() => {
-        const html = document.documentElement;
-        setIsDark(html.classList.contains("dark"));
-    }, []);
-
-    // toggle dark mode
-    const toggleTheme = () => {
-        const html = document.documentElement;
-        if (isDark) {
-            html.classList.remove("dark");
-            setIsDark(false);
-        } else {
-            html.classList.add("dark");
-            setIsDark(true);
-        }
-    };
+    const { isDark, toggleTheme } = useTheme();
 
     return (
         <header className="header">
@@ -59,16 +41,6 @@ export default function Header() {
                             width="20"
                             height="20"
                             viewBox="0 0 24 24"
-                            fill="currentColor"
-                            className="moon-icon"
-                        >
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                        </svg>
-                    ) : (
-                        <svg
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="2"
@@ -84,6 +56,16 @@ export default function Header() {
                             <line x1="21" y1="12" x2="23" y2="12" />
                             <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
                             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                        </svg>
+                    ) : (
+                        <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            className="moon-icon"
+                        >
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                         </svg>
                     )}
                 </button>

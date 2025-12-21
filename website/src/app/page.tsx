@@ -3,10 +3,11 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useTheme } from '../components/ThemeContext';
 
 export default function HomePage() {
-    const [isDark, setIsDark] = useState(false);
+    const { isDark, toggleTheme } = useTheme();
     const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
 
     const toggleExpand = (id: string) => {
@@ -16,28 +17,13 @@ export default function HomePage() {
         }));
     };
 
-    useEffect(() => {
-        // Check initial theme
-        const checkTheme = () => {
-            setIsDark(document.documentElement.classList.contains('dark'));
-        };
-
-        checkTheme();
-
-        const observer = new MutationObserver(checkTheme);
-        observer.observe(document.documentElement, {
-            attributes: true,
-            attributeFilter: ['class']
-        });
-
-        return () => observer.disconnect();
-    }, []);
-
 
     const iconColors = {
-        bg: isDark ? '#1f2937' : '#e5e7eb',
-        bgHover: isDark ? '#374151' : '#d1d5db',
-        icon: isDark ? '#d1d5db' : '#374151'
+        bg: isDark ? '#121212' : '#f5f5f4',
+        bgHover: isDark ? '#2a2a2a' : '#ffffff',
+        icon: isDark ? 'white' : '#1c1917',
+        border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
+        shadow: isDark ? 'none' : '0 1px 2px rgba(0, 0, 0, 0.04)'
     };
 
     return (
@@ -67,9 +53,7 @@ export default function HomePage() {
                         </div>
 
                         <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-xl text-left" style={{ marginBottom: '20px' }}>
-                            I'm a software developer and student based in Toronto.
-                            I build
-                            intuitive user experiences.
+                            I enjoy designing and building reliable software. From algorithms to full stack solutions, I love exploring new technologies that push my skills forward!
                         </p>
 
                         {/* social icon links */}
@@ -80,15 +64,17 @@ export default function HomePage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{
-                                    width: '44px',
-                                    height: '44px',
+                                    width: '48px',
+                                    height: '48px',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     backgroundColor: iconColors.bg,
                                     color: iconColors.icon,
                                     borderRadius: '8px',
-                                    transition: 'background-color 0.2s'
+                                    transition: 'all 0.2s',
+                                    border: iconColors.border,
+                                    boxShadow: iconColors.shadow
                                 }}
                                 aria-label="GitHub"
                                 onMouseEnter={(e) => {
@@ -98,7 +84,7 @@ export default function HomePage() {
                                     e.currentTarget.style.backgroundColor = iconColors.bg;
                                 }}
                             >
-                                <svg style={{ width: '20px', height: '20px' }} fill="currentColor" viewBox="0 0 24 24">
+                                <svg style={{ width: '24px', height: '24px' }} fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
                                 </svg>
                             </a>
@@ -109,15 +95,17 @@ export default function HomePage() {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 style={{
-                                    width: '44px',
-                                    height: '44px',
+                                    width: '48px',
+                                    height: '48px',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     backgroundColor: iconColors.bg,
                                     color: iconColors.icon,
                                     borderRadius: '8px',
-                                    transition: 'background-color 0.2s'
+                                    transition: 'all 0.2s',
+                                    border: iconColors.border,
+                                    boxShadow: iconColors.shadow
                                 }}
                                 aria-label="LinkedIn"
                                 onMouseEnter={(e) => {
@@ -127,7 +115,7 @@ export default function HomePage() {
                                     e.currentTarget.style.backgroundColor = iconColors.bg;
                                 }}
                             >
-                                <svg style={{ width: '20px', height: '20px' }} fill="currentColor" viewBox="0 0 24 24">
+                                <svg style={{ width: '24px', height: '24px' }} fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                                 </svg>
                             </a>
@@ -136,15 +124,17 @@ export default function HomePage() {
                             <a
                                 href="mailto:kaifieldkim@gmail.com"
                                 style={{
-                                    width: '44px',
-                                    height: '44px',
+                                    width: '48px',
+                                    height: '48px',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     backgroundColor: iconColors.bg,
                                     color: iconColors.icon,
                                     borderRadius: '8px',
-                                    transition: 'background-color 0.2s'
+                                    transition: 'all 0.2s',
+                                    border: iconColors.border,
+                                    boxShadow: iconColors.shadow
                                 }}
                                 aria-label="Email"
                                 onMouseEnter={(e) => {
@@ -154,7 +144,7 @@ export default function HomePage() {
                                     e.currentTarget.style.backgroundColor = iconColors.bg;
                                 }}
                             >
-                                <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg style={{ width: '24px', height: '24px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                 </svg>
                             </a>
@@ -163,15 +153,17 @@ export default function HomePage() {
                             <a
                                 href="/resume"
                                 style={{
-                                    width: '44px',
-                                    height: '44px',
+                                    width: '48px',
+                                    height: '48px',
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     backgroundColor: iconColors.bg,
                                     color: iconColors.icon,
                                     borderRadius: '8px',
-                                    transition: 'background-color 0.2s'
+                                    transition: 'all 0.2s',
+                                    border: iconColors.border,
+                                    boxShadow: iconColors.shadow
                                 }}
                                 aria-label="Resume"
                                 onMouseEnter={(e) => {
@@ -181,7 +173,7 @@ export default function HomePage() {
                                     e.currentTarget.style.backgroundColor = iconColors.bg;
                                 }}
                             >
-                                <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg style={{ width: '24px', height: '24px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                             </a>
@@ -194,8 +186,8 @@ export default function HomePage() {
                             <Image
                                 src="/assets/latte2.jpg"
                                 alt="Kai Kim"
-                                width={300}
-                                height={300}
+                                width={160}
+                                height={160}
                                 className="hero-image"
                                 priority
                             />
@@ -205,7 +197,7 @@ export default function HomePage() {
             </section>
 
             {/* Experience Section */}
-            <section style={{ marginTop: '48px' }}>
+            <section style={{ marginTop: '24px' }}>
                 <h2 style={{
                     fontSize: '2rem',
                     fontWeight: 'bold',
@@ -347,7 +339,7 @@ export default function HomePage() {
                                     />
                                 </div>
 
-                                <div>
+                                <div style={{ marginTop: '-4px' }}>
                                     <h3 style={{
                                         fontSize: '1rem',
                                         fontWeight: '600',
@@ -504,7 +496,8 @@ export default function HomePage() {
                                 alignSelf: 'flex-start',
                                 fontWeight: '500',
                                 transition: 'all 0.2s ease',
-                                marginLeft: '68px' // Align with text
+                                marginLeft: '68px', // Align with text
+                                marginTop: '-16px'
                             }}
                             onMouseEnter={(e) => {
                                 e.currentTarget.style.backgroundColor = isDark ? '#374151' : '#e5e7eb';
@@ -589,7 +582,7 @@ export default function HomePage() {
                         />
                         <div>
                             <h3 style={{
-                                fontSize: '0.9375rem',
+                                fontSize: '1rem',
                                 fontWeight: '600',
                                 color: isDark ? 'white' : '#1c1917',
                                 marginBottom: '0px'
@@ -597,7 +590,7 @@ export default function HomePage() {
                                 Queen's University
                             </h3>
                             <p style={{
-                                fontSize: '0.8125rem',
+                                fontSize: '0.875rem',
                                 color: isDark ? '#9ca3af' : '#6b7280'
                             }}>
                                 Bachelor of Computing
@@ -945,7 +938,139 @@ export default function HomePage() {
             </section>
 
             {/* Blank Footer Space */}
-            <div style={{ height: '128px' }}></div>
+            <div style={{ height: '96px' }}></div>
+            <div style={{
+                position: 'fixed',
+                bottom: '24px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                backgroundColor: isDark ? 'rgba(31, 41, 55, 0.8)' : 'rgba(243, 244, 246, 0.8)',
+                backdropFilter: 'blur(12px)',
+                border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}`,
+                padding: '8px',
+                borderRadius: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '5px',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+                zIndex: 1000
+            }}>
+
+                <div style={{
+                    backgroundColor: isDark ? '#374151' : 'white',
+                    width: '44px',
+                    height: '44px',
+                    borderRadius: '14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: isDark ? 'none' : '0 2px 4px rgba(0,0,0,0.05)',
+                    color: isDark ? 'white' : 'black'
+                }}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                </div>
+
+
+                <Link href="/projects" style={{
+                    width: '44px',
+                    height: '44px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: isDark ? '#9ca3af' : '#6b7280',
+                    transition: 'color 0.2s'
+                }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = isDark ? 'white' : 'black'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = isDark ? '#9ca3af' : '#6b7280'}
+                >
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <polyline points="9 10 11 12 9 14"></polyline>
+                        <line x1="13" y1="14" x2="17" y2="14"></line>
+                    </svg>
+                </Link>
+
+                <div style={{ width: '1px', height: '22px', backgroundColor: isDark ? '#4b5563' : '#d1d5db', margin: '0 4px' }}></div>
+
+
+                <div style={{ display: 'flex', gap: '4px' }}>
+
+                    <a href="https://github.com/kaificial" target="_blank" rel="noopener noreferrer" style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = isDark ? 'white' : 'black'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = isDark ? '#9ca3af' : '#6b7280'}
+                    >
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
+                    </a>
+
+                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = isDark ? 'white' : 'black'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = isDark ? '#9ca3af' : '#6b7280'}
+                    >
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
+                    </a>
+
+                    <a href="/resume" style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = isDark ? 'white' : 'black'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = isDark ? '#9ca3af' : '#6b7280'}
+                    >
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </a>
+
+                    <a href="mailto:kaifieldkim@gmail.com" style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = isDark ? 'white' : 'black'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = isDark ? '#9ca3af' : '#6b7280'}
+                    >
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    </a>
+                </div>
+
+
+                <div style={{ width: '1px', height: '22px', backgroundColor: isDark ? '#4b5563' : '#d1d5db', margin: '0 4px' }}></div>
+
+
+                <div style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}>
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.26.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 14.82 1.14.54.3.719 1.02.419 1.56-.299.421-1.02.599-1.439.3z" /></svg>
+                </div>
+
+                <button
+                    onClick={toggleTheme}
+                    style={{
+                        width: '48px',
+                        height: '48px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: isDark ? '#9ca3af' : '#6b7280',
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = isDark ? 'white' : 'black'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = isDark ? '#9ca3af' : '#6b7280'}
+                >
+                    {isDark ? (
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    ) : (
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        </svg>
+                    )}
+                </button>
+            </div>
         </div >
     );
 }

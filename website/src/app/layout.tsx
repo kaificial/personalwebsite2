@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter, IBM_Plex_Mono } from "next/font/google";
 import "../styles/globals.scss";
 import Header from "../components/Header";
+import { ThemeProvider } from "../components/ThemeContext";
 
 const inter = Inter({
     subsets: ["latin"],
@@ -43,10 +44,12 @@ export default function RootLayout({
     return (
         <html lang="en" className="dark">
             <body className={`${inter.variable} ${ibmPlexMono.variable}`}>
-                <Header />
-                <main>
-                    {children}
-                </main>
+                <ThemeProvider>
+                    <Header />
+                    <main>
+                        {children}
+                    </main>
+                </ThemeProvider>
             </body>
         </html>
     );
