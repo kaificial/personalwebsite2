@@ -1,0 +1,57 @@
+"use client";
+
+import { motion, useMotionValue, useMotionTemplate } from 'framer-motion';
+import React from 'react';
+
+interface SpotlightCardProps {
+    children: React.ReactNode;
+    isDark: boolean;
+}
+
+export const SpotlightCard = ({ children, isDark }: SpotlightCardProps) => {
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+        const { left, top } = currentTarget.getBoundingClientRect();
+        mouseX.set(clientX - left);
+        mouseY.set(clientY - top);
+    }
+
+    return (
+        <motion.div
+            onMouseMove={handleMouseMove}
+            className="group relative"
+            initial={{ scale: 0.99 }}
+            whileInView={{ scale: 0.99 }}
+            whileHover={{ scale: 1.01, y: -5 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+                border: `1px solid ${isDark ? '#374151' : '#e5e7eb'}`,
+                borderRadius: '12px',
+                padding: '16px',
+                backgroundColor: isDark ? '#0a0a0a' : 'white',
+                position: 'relative',
+                overflow: 'hidden'
+            }}
+        >
+            <motion.div
+                className="pointer-events-none absolute -inset-px opacity-0 group-hover:opacity-100"
+                style={{
+                    background: useMotionTemplate`
+                        radial-gradient(
+                            350px circle at ${mouseX}px ${mouseY}px,
+                            rgba(37, 99, 235, 0.15),
+                            transparent 80%
+                        )
+                    `,
+                    transition: 'opacity 0.3s'
+                }}
+            />
+            <div style={{ position: 'relative', zIndex: 1 }}>
+                {children}
+            </div>
+        </motion.div>
+    );
+};

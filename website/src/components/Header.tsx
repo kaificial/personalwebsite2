@@ -170,13 +170,13 @@ export default function Header() {
                                 width="20"
                                 height="20"
                                 viewBox="0 0 24 24"
-                                fill="none"
+                                fill="currentColor"
                                 stroke="currentColor"
                                 strokeWidth="2"
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                             >
-                                <circle cx="12" cy="12" r="5" />
+                                <circle cx="12" cy="12" r="5" fill="currentColor" />
                                 <line x1="12" y1="1" x2="12" y2="3" />
                                 <line x1="12" y1="21" x2="12" y2="23" />
                                 <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
