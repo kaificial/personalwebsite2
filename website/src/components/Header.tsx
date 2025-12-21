@@ -61,6 +61,7 @@ export default function Header() {
     return (
         <header className="header">
             <motion.div
+                key={pathname}
                 className="header-container"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -140,8 +141,8 @@ export default function Header() {
                                 minWidth: '40px',
                                 height: '40px',
                                 padding: '0 12px',
-                                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
-                                border: `1px solid ${isLiked ? (isDark ? 'rgba(37, 99, 235, 0.4)' : 'rgba(37, 99, 235, 0.3)') : (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)')}`,
+                                backgroundColor: isDark ? '#171717' : '#f9fafb',
+                                border: `1px solid ${isLiked ? (isDark ? 'rgba(37, 99, 235, 0.4)' : 'rgba(37, 99, 235, 0.3)') : (isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)')}`,
                                 borderRadius: '10px',
                                 color: isLiked ? '#2563eb' : (isDark ? '#94a3b8' : '#64748b'),
                                 cursor: 'pointer',
@@ -160,44 +161,50 @@ export default function Header() {
                         </motion.button>
                     </motion.div>
 
-                    <button
-                        onClick={toggleTheme}
-                        className="theme-toggle"
-                        aria-label="Toggle dark mode"
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 4.0, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                     >
-                        {isDark ? (
-                            <svg
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            >
-                                <circle cx="12" cy="12" r="5" fill="currentColor" />
-                                <line x1="12" y1="1" x2="12" y2="3" />
-                                <line x1="12" y1="21" x2="12" y2="23" />
-                                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-                                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-                                <line x1="1" y1="12" x2="3" y2="12" />
-                                <line x1="21" y1="12" x2="23" y2="12" />
-                                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-                                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-                            </svg>
-                        ) : (
-                            <svg
-                                width="20"
-                                height="20"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                                className="moon-icon"
-                            >
-                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                            </svg>
-                        )}
-                    </button>
+                        <button
+                            onClick={toggleTheme}
+                            className="theme-toggle"
+                            aria-label="Toggle dark mode"
+                        >
+                            {isDark ? (
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                >
+                                    <circle cx="12" cy="12" r="5" fill="currentColor" />
+                                    <line x1="12" y1="1" x2="12" y2="3" />
+                                    <line x1="12" y1="21" x2="12" y2="23" />
+                                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                                    <line x1="1" y1="12" x2="3" y2="12" />
+                                    <line x1="21" y1="12" x2="23" y2="12" />
+                                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                                </svg>
+                            ) : (
+                                <svg
+                                    width="20"
+                                    height="20"
+                                    viewBox="0 0 24 24"
+                                    fill="currentColor"
+                                    className="moon-icon"
+                                >
+                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                                </svg>
+                            )}
+                        </button>
+                    </motion.div>
                 </div>
             </motion.div>
         </header>

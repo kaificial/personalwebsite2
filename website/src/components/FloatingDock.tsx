@@ -220,18 +220,13 @@ export default function FloatingDock() {
             </motion.div>
 
             <motion.button
-                animate={hoveredIcon === 'theme' ? { scale: 1.1, y: -2 } : "visible"}
-                transition={{
-                    type: "spring",
-                    stiffness: 400,
-                    damping: 20,
-                    // Preserve the entrance delay only for the initial reveal
-                    opacity: { delay: 3.5, duration: 0.5 },
-                    scale: hoveredIcon === 'theme' ? { duration: 0.2 } : { type: "spring", stiffness: 400, damping: 20 },
-                    y: hoveredIcon === 'theme' ? { duration: 0.2 } : { type: "spring", stiffness: 400, damping: 20 }
+                variants={{
+                    hidden: { opacity: 0, scale: 0.8, y: 10 },
+                    visible: { opacity: 1, scale: 1, y: 0 }
                 }}
                 onMouseEnter={() => setHoveredIcon('theme')}
                 onMouseLeave={() => setHoveredIcon(null)}
+                whileHover={{ scale: 1.1, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={toggleTheme}
                 style={{
