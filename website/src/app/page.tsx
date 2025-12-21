@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTheme } from '../components/ThemeContext';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 
 export default function HomePage() {
     const { isDark, toggleTheme } = useTheme();
@@ -70,8 +70,28 @@ export default function HomePage() {
         shadow: isDark ? 'none' : '0 1px 2px rgba(0, 0, 0, 0.04)'
     };
 
+    const { scrollYProgress } = useScroll();
+    const scaleX = useSpring(scrollYProgress, {
+        stiffness: 100,
+        damping: 30,
+        restDelta: 0.001
+    });
+
     return (
         <div className="w-full">
+            <motion.div
+                style={{
+                    scaleX,
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '3px',
+                    backgroundColor: '#2563eb', // Matches "View All Projects" button
+                    transformOrigin: '0%',
+                    zIndex: 9999
+                }}
+            />
             {/* 
                 Hero Section
             */}
@@ -84,7 +104,7 @@ export default function HomePage() {
                             className="hero-title font-bold text-gray-900 dark:text-white tracking-tight leading-none text-left"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            transition={{ delay: 0.1, duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                            transition={{ delay: 0.2, duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
                         >
                             Kai Kim
                         </motion.h1>
@@ -93,7 +113,7 @@ export default function HomePage() {
                             className="hero-subtitle-row"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            transition={{ delay: 1.0, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                            transition={{ delay: 1.2, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
                         >
                             <span className="hero-subtitle text-gray-900 dark:text-gray-100 font-medium m-0">
                                 CS @ Queen's
@@ -153,7 +173,7 @@ export default function HomePage() {
                             style={{ marginBottom: '20px' }}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            transition={{ delay: 1.1, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                            transition={{ delay: 1.35, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
                         >
                             I enjoy designing and building reliable software. From algorithms to full stack solutions, I love exploring new technologies that push my skills forward!
                         </motion.p>
@@ -161,133 +181,77 @@ export default function HomePage() {
                         {/* social icon links */}
                         <motion.div
                             style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '24px' }}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 1.2, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                            initial="hidden"
+                            animate="visible"
+                            variants={{
+                                visible: {
+                                    transition: {
+                                        delayChildren: 1.5,
+                                        staggerChildren: 0.1
+                                    }
+                                }
+                            }}
                         >
-                            {/* GitHub */}
-                            <motion.a
-                                href="https://github.com/kaificial"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                    position: 'relative',
-                                    width: '40px',
-                                    height: '40px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    backgroundColor: iconColors.bg,
-                                    color: iconColors.icon,
-                                    borderRadius: '8px',
-                                    border: iconColors.border,
-                                    boxShadow: iconColors.shadow
-                                }}
-                                whileHover={{ backgroundColor: iconColors.bgHover, scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                                aria-label="GitHub"
-                                onMouseEnter={() => setHoveredIcon('hero-github')}
-                                onMouseLeave={() => setHoveredIcon(null)}
-                            >
-                                <AnimatePresence>
-                                    {hoveredIcon === 'hero-github' && <Tooltip text="GitHub" />}
-                                </AnimatePresence>
-                                <svg style={{ width: '20px', height: '20px' }} fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                                </svg>
-                            </motion.a>
-
-                            {/* LinkedIn */}
-                            <motion.a
-                                href="https://www.linkedin.com/in/newjeans/"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{
-                                    position: 'relative',
-                                    width: '40px',
-                                    height: '40px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    backgroundColor: iconColors.bg,
-                                    color: iconColors.icon,
-                                    borderRadius: '8px',
-                                    border: iconColors.border,
-                                    boxShadow: iconColors.shadow
-                                }}
-                                whileHover={{ backgroundColor: iconColors.bgHover, scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                                aria-label="LinkedIn"
-                                onMouseEnter={() => setHoveredIcon('hero-linkedin')}
-                                onMouseLeave={() => setHoveredIcon(null)}
-                            >
-                                <AnimatePresence>
-                                    {hoveredIcon === 'hero-linkedin' && <Tooltip text="LinkedIn" />}
-                                </AnimatePresence>
-                                <svg style={{ width: '20px', height: '20px' }} fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                                </svg>
-                            </motion.a>
-
-                            {/* Email */}
-                            <motion.a
-                                href="mailto:kaifieldkim@gmail.com"
-                                style={{
-                                    position: 'relative',
-                                    width: '40px',
-                                    height: '40px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    backgroundColor: iconColors.bg,
-                                    color: iconColors.icon,
-                                    borderRadius: '8px',
-                                    border: iconColors.border,
-                                    boxShadow: iconColors.shadow
-                                }}
-                                whileHover={{ backgroundColor: iconColors.bgHover, scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                                aria-label="Email"
-                                onMouseEnter={() => setHoveredIcon('hero-email')}
-                                onMouseLeave={() => setHoveredIcon(null)}
-                            >
-                                <AnimatePresence>
-                                    {hoveredIcon === 'hero-email' && <Tooltip text="Email" />}
-                                </AnimatePresence>
-                                <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
-                            </motion.a>
-
-                            {/* Resume */}
-                            <motion.a
-                                href="/resume"
-                                style={{
-                                    position: 'relative',
-                                    width: '40px',
-                                    height: '40px',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    backgroundColor: iconColors.bg,
-                                    color: iconColors.icon,
-                                    borderRadius: '8px',
-                                    border: iconColors.border,
-                                    boxShadow: iconColors.shadow
-                                }}
-                                whileHover={{ backgroundColor: iconColors.bgHover, scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                                aria-label="Resume"
-                                onMouseEnter={() => setHoveredIcon('hero-resume')}
-                                onMouseLeave={() => setHoveredIcon(null)}
-                            >
-                                <AnimatePresence>
-                                    {hoveredIcon === 'hero-resume' && <Tooltip text="Resume" />}
-                                </AnimatePresence>
-                                <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                            </motion.a>
+                            {[
+                                {
+                                    id: 'hero-github',
+                                    href: "https://github.com/kaificial",
+                                    label: 'GitHub',
+                                    icon: <svg style={{ width: '20px', height: '20px' }} fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
+                                },
+                                {
+                                    id: 'hero-linkedin',
+                                    href: "https://www.linkedin.com/in/newjeans/",
+                                    label: 'LinkedIn',
+                                    icon: <svg style={{ width: '20px', height: '20px' }} fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
+                                },
+                                {
+                                    id: 'hero-email',
+                                    href: "mailto:kaifieldkim@gmail.com",
+                                    label: 'Email',
+                                    icon: <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                },
+                                {
+                                    id: 'hero-resume',
+                                    href: "/resume",
+                                    label: 'Resume',
+                                    icon: <svg style={{ width: '20px', height: '20px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                }
+                            ].map((social) => (
+                                <motion.a
+                                    key={social.id}
+                                    href={social.href}
+                                    target={social.href.startsWith('http') ? "_blank" : undefined}
+                                    rel={social.href.startsWith('http') ? "noopener noreferrer" : undefined}
+                                    style={{
+                                        position: 'relative',
+                                        width: '40px',
+                                        height: '40px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        backgroundColor: iconColors.bg,
+                                        color: iconColors.icon,
+                                        borderRadius: '8px',
+                                        border: iconColors.border,
+                                        boxShadow: iconColors.shadow
+                                    }}
+                                    variants={{
+                                        hidden: { opacity: 0, y: 10 },
+                                        visible: { opacity: 1, y: 0 }
+                                    }}
+                                    whileHover={{ backgroundColor: iconColors.bgHover, scale: 1.1 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    aria-label={social.label}
+                                    onMouseEnter={() => setHoveredIcon(social.id)}
+                                    onMouseLeave={() => setHoveredIcon(null)}
+                                >
+                                    <AnimatePresence>
+                                        {hoveredIcon === social.id && <Tooltip text={social.label} />}
+                                    </AnimatePresence>
+                                    {social.icon}
+                                </motion.a>
+                            ))}
                         </motion.div>
                     </div>
 
@@ -296,7 +260,7 @@ export default function HomePage() {
                         className="hero-image-container"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 1.3, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                        transition={{ delay: 1.65, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
                     >
                         <div
                             className="image-placeholder"
@@ -361,7 +325,7 @@ export default function HomePage() {
                 style={{ marginTop: '24px' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 1.4, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 1.8, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
             >
                 <h2 style={{
                     fontSize: '2rem',
@@ -785,7 +749,7 @@ export default function HomePage() {
                 style={{ marginTop: '48px' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 1.5, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 1.95, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
             >
                 <h2 style={{
                     fontSize: '2rem',
@@ -849,7 +813,7 @@ export default function HomePage() {
                 style={{ marginTop: '48px' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 1.6, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 2.1, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
             >
                 <h2 style={{
                     fontSize: '2rem',
@@ -860,14 +824,42 @@ export default function HomePage() {
                     Skills
                 </h2>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                <motion.div
+                    style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    variants={{
+                        visible: {
+                            transition: {
+                                staggerChildren: 0.2
+                            }
+                        }
+                    }}
+                >
                     {/* Languages */}
-                    <div>
+                    <motion.div variants={{
+                        hidden: { opacity: 0, y: 10 },
+                        visible: { opacity: 1, y: 0 }
+                    }}>
                         <h3 style={{ fontSize: '1.125rem', fontWeight: '500', marginBottom: '12px', color: isDark ? 'white' : '#1c1917' }}>Languages</h3>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        <motion.div
+                            style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}
+                            variants={{
+                                visible: {
+                                    transition: {
+                                        staggerChildren: 0.05
+                                    }
+                                }
+                            }}
+                        >
                             {['JavaScript', 'TypeScript', 'HTML/CSS', 'Python', 'Java', 'Arduino'].map((skill, index) => (
                                 <motion.span
                                     key={index}
+                                    variants={{
+                                        hidden: { opacity: 0, scale: 0.8 },
+                                        visible: { opacity: 1, scale: 1 }
+                                    }}
                                     whileHover={{ scale: 1.1, y: -2 }}
                                     transition={{ type: "spring", stiffness: 400, damping: 10 }}
                                     whileTap={{ scale: 0.95 }}
@@ -886,16 +878,32 @@ export default function HomePage() {
                                     {skill}
                                 </motion.span>
                             ))}
-                        </div>
-                    </div>
+                        </motion.div>
+                    </motion.div>
 
                     {/* Frontend */}
-                    <div>
+                    <motion.div variants={{
+                        hidden: { opacity: 0, y: 10 },
+                        visible: { opacity: 1, y: 0 }
+                    }}>
                         <h3 style={{ fontSize: '1.125rem', fontWeight: '500', marginBottom: '12px', color: isDark ? 'white' : '#1c1917' }}>Frontend</h3>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        <motion.div
+                            style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}
+                            variants={{
+                                visible: {
+                                    transition: {
+                                        staggerChildren: 0.05
+                                    }
+                                }
+                            }}
+                        >
                             {['React', 'Next.js', 'Tailwind CSS'].map((skill, index) => (
                                 <motion.span
                                     key={index}
+                                    variants={{
+                                        hidden: { opacity: 0, scale: 0.8 },
+                                        visible: { opacity: 1, scale: 1 }
+                                    }}
                                     whileHover={{ scale: 1.1, y: -2 }}
                                     transition={{ type: "spring", stiffness: 400, damping: 10 }}
                                     whileTap={{ scale: 0.95 }}
@@ -914,16 +922,32 @@ export default function HomePage() {
                                     {skill}
                                 </motion.span>
                             ))}
-                        </div>
-                    </div>
+                        </motion.div>
+                    </motion.div>
 
                     {/* Backend */}
-                    <div>
+                    <motion.div variants={{
+                        hidden: { opacity: 0, y: 10 },
+                        visible: { opacity: 1, y: 0 }
+                    }}>
                         <h3 style={{ fontSize: '1.125rem', fontWeight: '500', marginBottom: '12px', color: isDark ? 'white' : '#1c1917' }}>Backend</h3>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        <motion.div
+                            style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}
+                            variants={{
+                                visible: {
+                                    transition: {
+                                        staggerChildren: 0.05
+                                    }
+                                }
+                            }}
+                        >
                             {['Node.js', 'Express.js', 'MongoDB'].map((skill, index) => (
                                 <motion.span
                                     key={index}
+                                    variants={{
+                                        hidden: { opacity: 0, scale: 0.8 },
+                                        visible: { opacity: 1, scale: 1 }
+                                    }}
                                     whileHover={{ scale: 1.1, y: -2 }}
                                     transition={{ type: "spring", stiffness: 400, damping: 10 }}
                                     whileTap={{ scale: 0.95 }}
@@ -942,16 +966,32 @@ export default function HomePage() {
                                     {skill}
                                 </motion.span>
                             ))}
-                        </div>
-                    </div>
+                        </motion.div>
+                    </motion.div>
 
                     {/* Tools & Others */}
-                    <div>
+                    <motion.div variants={{
+                        hidden: { opacity: 0, y: 10 },
+                        visible: { opacity: 1, y: 0 }
+                    }}>
                         <h3 style={{ fontSize: '1.125rem', fontWeight: '500', marginBottom: '12px', color: isDark ? 'white' : '#1c1917' }}>Tools & Others</h3>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        <motion.div
+                            style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}
+                            variants={{
+                                visible: {
+                                    transition: {
+                                        staggerChildren: 0.05
+                                    }
+                                }
+                            }}
+                        >
                             {['Git', 'REST APIs', 'VS Code', 'Canva'].map((skill, index) => (
                                 <motion.span
                                     key={index}
+                                    variants={{
+                                        hidden: { opacity: 0, scale: 0.8 },
+                                        visible: { opacity: 1, scale: 1 }
+                                    }}
                                     whileHover={{ scale: 1.1, y: -2 }}
                                     transition={{ type: "spring", stiffness: 400, damping: 10 }}
                                     whileTap={{ scale: 0.95 }}
@@ -970,9 +1010,9 @@ export default function HomePage() {
                                     {skill}
                                 </motion.span>
                             ))}
-                        </div>
-                    </div>
-                </div>
+                        </motion.div>
+                    </motion.div>
+                </motion.div>
             </motion.section>
 
             {/* Featured Projects Section */}
@@ -980,7 +1020,7 @@ export default function HomePage() {
                 style={{ marginTop: '48px' }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 1.7, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 2.25, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
             >
                 <h2 style={{
                     fontSize: '2rem',
@@ -1243,9 +1283,22 @@ export default function HomePage() {
             {/* Blank Footer Space */}
             < div style={{ height: '96px' }}></div >
             <motion.div
-                initial={{ opacity: 0, x: '-50%' }}
-                animate={{ opacity: 1, x: '-50%' }}
-                transition={{ duration: 1.0, delay: 1.8, ease: [0.22, 1, 0.36, 1] }}
+                initial="hidden"
+                animate="visible"
+                variants={{
+                    hidden: { opacity: 0, x: '-50%' },
+                    visible: {
+                        opacity: 1,
+                        x: '-50%',
+                        transition: {
+                            duration: 1.4,
+                            delay: 2.4,
+                            ease: [0.22, 1, 0.36, 1],
+                            staggerChildren: 0.08,
+                            delayChildren: 2.8
+                        }
+                    }
+                }}
                 style={{
                     position: 'fixed',
                     bottom: '24px',
@@ -1262,8 +1315,12 @@ export default function HomePage() {
                     zIndex: 1000
                 }}
             >
-
+                {/* Home */}
                 <motion.div
+                    variants={{
+                        hidden: { opacity: 0, scale: 0.8, y: 10 },
+                        visible: { opacity: 1, scale: 1, y: 0 }
+                    }}
                     onMouseEnter={() => setHoveredIcon('home')}
                     onMouseLeave={() => setHoveredIcon(null)}
                     whileHover={{ scale: 1.1, y: -2 }}
@@ -1273,7 +1330,7 @@ export default function HomePage() {
                         backgroundColor: isDark ? '#374151' : 'white',
                         width: '40px',
                         height: '40px',
-                        borderRadius: '8px', // Sharper corners
+                        borderRadius: '8px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -1290,8 +1347,12 @@ export default function HomePage() {
                     </svg>
                 </motion.div>
 
-
+                {/* Projects */}
                 <motion.div
+                    variants={{
+                        hidden: { opacity: 0, scale: 0.8, y: 10 },
+                        visible: { opacity: 1, scale: 1, y: 0 }
+                    }}
                     onMouseEnter={() => setHoveredIcon('projects')}
                     onMouseLeave={() => setHoveredIcon(null)}
                     whileHover={{ scale: 1.1, y: -2 }}
@@ -1321,77 +1382,58 @@ export default function HomePage() {
                     </Link>
                 </motion.div>
 
-                <div style={{ width: '1px', height: '20px', backgroundColor: isDark ? '#4b5563' : '#d1d5db', margin: '0 4px' }}></div>
-
+                <motion.div
+                    variants={{
+                        hidden: { opacity: 0, scale: 0.8 },
+                        visible: { opacity: 1, scale: 1 }
+                    }}
+                    style={{ width: '1px', height: '20px', backgroundColor: isDark ? '#4b5563' : '#d1d5db', margin: '0 4px' }}
+                />
 
                 <div style={{ display: 'flex', gap: '4px' }}>
-
-                    <motion.a
-                        onMouseEnter={() => setHoveredIcon('github')}
-                        onMouseLeave={() => setHoveredIcon(null)}
-                        whileHover={{ scale: 1.1, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                        href="https://github.com/kaificial"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ position: 'relative', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
-                    >
-                        <AnimatePresence>
-                            {hoveredIcon === 'github' && <Tooltip text="GitHub" />}
-                        </AnimatePresence>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
-                    </motion.a>
-
-                    <motion.a
-                        onMouseEnter={() => setHoveredIcon('linkedin')}
-                        onMouseLeave={() => setHoveredIcon(null)}
-                        whileHover={{ scale: 1.1, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                        href="https://linkedin.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ position: 'relative', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
-                    >
-                        <AnimatePresence>
-                            {hoveredIcon === 'linkedin' && <Tooltip text="LinkedIn" />}
-                        </AnimatePresence>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
-                    </motion.a>
-
-                    <motion.a
-                        onMouseEnter={() => setHoveredIcon('resume')}
-                        onMouseLeave={() => setHoveredIcon(null)}
-                        whileHover={{ scale: 1.1, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                        href="/resume"
-                        style={{ position: 'relative', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
-                    >
-                        <AnimatePresence>
-                            {hoveredIcon === 'resume' && <Tooltip text="Resume" />}
-                        </AnimatePresence>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    </motion.a>
-
-                    <motion.a
-                        onMouseEnter={() => setHoveredIcon('contact')}
-                        onMouseLeave={() => setHoveredIcon(null)}
-                        whileHover={{ scale: 1.1, y: -2 }}
-                        whileTap={{ scale: 0.95 }}
-                        href="mailto:kaifieldkim@gmail.com"
-                        style={{ position: 'relative', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
-                    >
-                        <AnimatePresence>
-                            {hoveredIcon === 'contact' && <Tooltip text="Email" />}
-                        </AnimatePresence>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                    </motion.a>
+                    {[
+                        { id: 'github', href: "https://github.com/kaificial", label: 'GitHub', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg> },
+                        { id: 'linkedin', href: "https://linkedin.com", label: 'LinkedIn', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg> },
+                        { id: 'resume', href: "/resume", label: 'Resume', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg> },
+                        { id: 'contact', href: "mailto:kaifieldkim@gmail.com", label: 'Email', icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> }
+                    ].map((social) => (
+                        <motion.a
+                            key={social.id}
+                            variants={{
+                                hidden: { opacity: 0, scale: 0.8, y: 10 },
+                                visible: { opacity: 1, scale: 1, y: 0 }
+                            }}
+                            onMouseEnter={() => setHoveredIcon(social.id)}
+                            onMouseLeave={() => setHoveredIcon(null)}
+                            whileHover={{ scale: 1.1, y: -2 }}
+                            whileTap={{ scale: 0.95 }}
+                            href={social.href}
+                            target={social.href.startsWith('http') ? "_blank" : undefined}
+                            rel={social.href.startsWith('http') ? "noopener noreferrer" : undefined}
+                            style={{ position: 'relative', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
+                        >
+                            <AnimatePresence>
+                                {hoveredIcon === social.id && <Tooltip text={social.label} />}
+                            </AnimatePresence>
+                            {social.icon}
+                        </motion.a>
+                    ))}
                 </div>
 
-
-                <div style={{ width: '1px', height: '20px', backgroundColor: isDark ? '#4b5563' : '#d1d5db', margin: '0 4px' }}></div>
-
-
                 <motion.div
+                    variants={{
+                        hidden: { opacity: 0, scale: 0.8 },
+                        visible: { opacity: 1, scale: 1 }
+                    }}
+                    style={{ width: '1px', height: '20px', backgroundColor: isDark ? '#4b5563' : '#d1d5db', margin: '0 4px' }}
+                />
+
+                {/* Spotify */}
+                <motion.div
+                    variants={{
+                        hidden: { opacity: 0, scale: 0.8, y: 10 },
+                        visible: { opacity: 1, scale: 1, y: 0 }
+                    }}
                     onMouseEnter={() => setHoveredIcon('spotify')}
                     onMouseLeave={() => setHoveredIcon(null)}
                     whileHover={{ scale: 1.1, y: -2 }}

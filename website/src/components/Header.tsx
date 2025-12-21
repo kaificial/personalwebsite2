@@ -18,13 +18,46 @@ export default function Header() {
     const pathname = usePathname();
     const { isDark, toggleTheme } = useTheme();
     const [count, setCount] = useState(0);
+    const [displayCount, setDisplayCount] = useState(0);
     const [isHovered, setIsHovered] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
 
     // Initial count state from localStorage
     useEffect(() => {
+        const hasLiked = localStorage.getItem("love-liked") === "true";
+        if (hasLiked) setIsLiked(true);
+
         const savedCount = localStorage.getItem("love-count");
         if (savedCount) {
-            setCount(parseInt(savedCount));
+            const finalCount = parseInt(savedCount);
+            setCount(finalCount);
+
+            setDisplayCount(0);
+
+            // Animate from 0 to finalCount
+            const duration = 2400;
+            const startTime = performance.now() + 500; // Start after 500ms
+
+            const animate = (currentTime: number) => {
+                if (currentTime < startTime) {
+                    requestAnimationFrame(animate);
+                    return;
+                }
+
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+
+                const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
+                const currentDisplay = Math.floor(easeOutQuart(progress) * finalCount);
+
+                setDisplayCount(currentDisplay);
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                }
+            };
+
+            requestAnimationFrame(animate);
         }
     }, []);
 
@@ -34,7 +67,7 @@ export default function Header() {
                 className="header-container"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.9, duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 1.1, duration: 1.4, ease: [0.22, 1, 0.36, 1] }}
             >
                 <nav className="header-nav">
                     {navLinks.map((link) => (
@@ -95,7 +128,10 @@ export default function Header() {
                             onClick={() => {
                                 const newCount = count + 1;
                                 setCount(newCount);
+                                setDisplayCount(newCount);
+                                setIsLiked(true);
                                 localStorage.setItem("love-count", newCount.toString());
+                                localStorage.setItem("love-liked", "true");
                             }}
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
@@ -109,22 +145,22 @@ export default function Header() {
                                 height: '40px',
                                 padding: '0 12px',
                                 backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
-                                border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                                border: `1px solid ${isLiked ? (isDark ? 'rgba(37, 99, 235, 0.4)' : 'rgba(37, 99, 235, 0.3)') : (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)')}`,
                                 borderRadius: '10px',
-                                color: isDark ? '#94a3b8' : '#64748b',
+                                color: isLiked ? '#2563eb' : (isDark ? '#94a3b8' : '#64748b'),
                                 cursor: 'pointer',
                                 fontSize: '0.875rem',
                                 fontWeight: '600',
-                                boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)',
+                                boxShadow: isLiked ? '0 2px 10px rgba(37, 99, 235, 0.15)' : '0 1px 2px rgba(0, 0, 0, 0.04)',
                                 transition: 'all 0.2s ease'
                             }}
                         >
                             <Flame
                                 size={16}
-                                color={isDark ? "#94a3b8" : "#64748b"}
-                                fill="none"
+                                color={isLiked ? "#2563eb" : (isDark ? "#94a3b8" : "#64748b")}
+                                fill={isLiked ? "#2563eb" : "none"}
                             />
-                            {count}
+                            {displayCount}
                         </motion.button>
                     </motion.div>
 
