@@ -5,9 +5,51 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useTheme } from '../components/ThemeContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function HomePage() {
     const { isDark, toggleTheme } = useTheme();
+    const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
+
+    const Tooltip = ({ text }: { text: string }) => (
+        <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.8, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, scale: 1, x: '-50%' }}
+            exit={{ opacity: 0, scale: 0.8, x: '-50%' }}
+            transition={{ duration: 0.15 }}
+            style={{
+                position: 'absolute',
+                bottom: '100%',
+                left: '50%',
+                marginBottom: '12px',
+                padding: '6px 12px',
+                backgroundColor: isDark ? 'rgba(31, 41, 55, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                color: isDark ? 'white' : 'black',
+                borderRadius: '8px',
+                fontSize: '12px',
+                fontWeight: '500',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                pointerEvents: 'none',
+                zIndex: 50,
+                border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}`,
+            }}
+        >
+            {text}
+            <div style={{
+                position: 'absolute',
+                bottom: '-4px',
+                left: '50%',
+                marginLeft: '-4px',
+                width: '8px',
+                height: '8px',
+                backgroundColor: 'inherit',
+                borderRight: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}`,
+                borderBottom: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}`,
+                transform: 'rotate(45deg)'
+            }} />
+        </motion.div>
+    );
     const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
 
     const toggleExpand = (id: string) => {
@@ -942,107 +984,178 @@ export default function HomePage() {
 
             {/* Blank Footer Space */}
             <div style={{ height: '96px' }}></div>
-            <div style={{
-                position: 'fixed',
-                bottom: '24px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                backgroundColor: isDark ? 'rgba(31, 41, 55, 0.8)' : 'rgba(243, 244, 246, 0.8)',
-                backdropFilter: 'blur(12px)',
-                border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}`,
-                padding: '6px',
-                borderRadius: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
-                zIndex: 1000
-            }}>
-
-                <div style={{
-                    backgroundColor: isDark ? '#374151' : 'white',
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '14px',
+            <motion.div
+                initial={{ y: 100, opacity: 0, x: '-50%' }}
+                animate={{ y: 0, opacity: 1, x: '-50%' }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                style={{
+                    position: 'fixed',
+                    bottom: '24px',
+                    left: '50%',
+                    backgroundColor: isDark ? 'rgba(31, 41, 55, 0.8)' : 'rgba(243, 244, 246, 0.8)',
+                    backdropFilter: 'blur(12px)',
+                    border: `1px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}`,
+                    padding: '6px',
+                    borderRadius: '16px',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: isDark ? 'none' : '0 2px 4px rgba(0,0,0,0.05)',
-                    color: isDark ? 'white' : 'black'
-                }}>
+                    gap: '4px',
+                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+                    zIndex: 1000
+                }}
+            >
+
+                <motion.div
+                    onMouseEnter={() => setHoveredIcon('home')}
+                    onMouseLeave={() => setHoveredIcon(null)}
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                    style={{
+                        position: 'relative',
+                        backgroundColor: isDark ? '#374151' : 'white',
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '8px', // Sharper corners
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: isDark ? 'none' : '0 2px 4px rgba(0,0,0,0.05)',
+                        color: isDark ? 'white' : 'black',
+                        cursor: 'default'
+                    }}>
+                    <AnimatePresence>
+                        {hoveredIcon === 'home' && <Tooltip text="Home" />}
+                    </AnimatePresence>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                         <polyline points="9 22 9 12 15 12 15 22"></polyline>
                     </svg>
-                </div>
+                </motion.div>
 
 
-                <Link href="/projects" style={{
-                    width: '40px',
-                    height: '40px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: isDark ? '#9ca3af' : '#6b7280',
-                    transition: 'color 0.2s'
-                }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = isDark ? 'white' : 'black'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = isDark ? '#9ca3af' : '#6b7280'}
+                <motion.div 
+                    onMouseEnter={() => setHoveredIcon('projects')}
+                    onMouseLeave={() => setHoveredIcon(null)}
+                    whileHover={{ scale: 1.1, y: -2 }} 
+                    whileTap={{ scale: 0.95 }}
+                    style={{ position: 'relative' }}
                 >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <polyline points="9 10 11 12 9 14"></polyline>
-                        <line x1="13" y1="14" x2="17" y2="14"></line>
-                    </svg>
-                </Link>
+                    <AnimatePresence>
+                        {hoveredIcon === 'projects' && <Tooltip text="Projects" />}
+                    </AnimatePresence>
+                    <Link href="/projects" style={{
+                        width: '40px',
+                        height: '40px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: isDark ? '#9ca3af' : '#6b7280',
+                        transition: 'color 0.2s'
+                    }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = isDark ? 'white' : 'black'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = isDark ? '#9ca3af' : '#6b7280'}
+                    >
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <polyline points="9 10 11 12 9 14"></polyline>
+                            <line x1="13" y1="14" x2="17" y2="14"></line>
+                        </svg>
+                    </Link>
+                </motion.div>
 
                 <div style={{ width: '1px', height: '20px', backgroundColor: isDark ? '#4b5563' : '#d1d5db', margin: '0 4px' }}></div>
 
 
                 <div style={{ display: 'flex', gap: '4px' }}>
 
-                    <a href="https://github.com/kaificial" target="_blank" rel="noopener noreferrer" style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
-                        onMouseEnter={(e) => e.currentTarget.style.color = isDark ? 'white' : 'black'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = isDark ? '#9ca3af' : '#6b7280'}
+                    <motion.a 
+                        onMouseEnter={() => setHoveredIcon('github')}
+                        onMouseLeave={() => setHoveredIcon(null)}
+                        whileHover={{ scale: 1.1, y: -2 }} 
+                        whileTap={{ scale: 0.95 }} 
+                        href="https://github.com/kaificial" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        style={{ position: 'relative', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
                     >
+                        <AnimatePresence>
+                            {hoveredIcon === 'github' && <Tooltip text="GitHub" />}
+                        </AnimatePresence>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" /></svg>
-                    </a>
+                    </motion.a>
 
-                    <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
-                        onMouseEnter={(e) => e.currentTarget.style.color = isDark ? 'white' : 'black'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = isDark ? '#9ca3af' : '#6b7280'}
+                    <motion.a 
+                        onMouseEnter={() => setHoveredIcon('linkedin')}
+                        onMouseLeave={() => setHoveredIcon(null)}
+                        whileHover={{ scale: 1.1, y: -2 }} 
+                        whileTap={{ scale: 0.95 }} 
+                        href="https://linkedin.com" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        style={{ position: 'relative', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
                     >
+                        <AnimatePresence>
+                            {hoveredIcon === 'linkedin' && <Tooltip text="LinkedIn" />}
+                        </AnimatePresence>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" /></svg>
-                    </a>
+                    </motion.a>
 
-                    <a href="/resume" style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
-                        onMouseEnter={(e) => e.currentTarget.style.color = isDark ? 'white' : 'black'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = isDark ? '#9ca3af' : '#6b7280'}
+                    <motion.a 
+                        onMouseEnter={() => setHoveredIcon('resume')}
+                        onMouseLeave={() => setHoveredIcon(null)}
+                        whileHover={{ scale: 1.1, y: -2 }} 
+                        whileTap={{ scale: 0.95 }} 
+                        href="/resume" 
+                        style={{ position: 'relative', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
                     >
+                        <AnimatePresence>
+                            {hoveredIcon === 'resume' && <Tooltip text="Resume" />}
+                        </AnimatePresence>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    </a>
+                    </motion.a>
 
-                    <a href="mailto:kaifieldkim@gmail.com" style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
-                        onMouseEnter={(e) => e.currentTarget.style.color = isDark ? 'white' : 'black'}
-                        onMouseLeave={(e) => e.currentTarget.style.color = isDark ? '#9ca3af' : '#6b7280'}
+                    <motion.a 
+                        onMouseEnter={() => setHoveredIcon('contact')}
+                        onMouseLeave={() => setHoveredIcon(null)}
+                        whileHover={{ scale: 1.1, y: -2 }} 
+                        whileTap={{ scale: 0.95 }} 
+                        href="mailto:kaifieldkim@gmail.com" 
+                        style={{ position: 'relative', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
                     >
+                        <AnimatePresence>
+                            {hoveredIcon === 'contact' && <Tooltip text="Email" />}
+                        </AnimatePresence>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                    </a>
+                    </motion.a>
                 </div>
 
 
                 <div style={{ width: '1px', height: '20px', backgroundColor: isDark ? '#4b5563' : '#d1d5db', margin: '0 4px' }}></div>
 
 
-                <div style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}>
+                <motion.div 
+                    onMouseEnter={() => setHoveredIcon('spotify')}
+                    onMouseLeave={() => setHoveredIcon(null)}
+                    whileHover={{ scale: 1.1, y: -2 }} 
+                    whileTap={{ scale: 0.95 }} 
+                    style={{ position: 'relative', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDark ? '#9ca3af' : '#6b7280' }}
+                >
+                    <AnimatePresence>
+                        {hoveredIcon === 'spotify' && <Tooltip text="Spotify" />}
+                    </AnimatePresence>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.26.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 14.82 1.14.54.3.719 1.02.419 1.56-.299.421-1.02.599-1.439.3z" /></svg>
-                </div>
+                </motion.div>
 
-                <button
+                <motion.button
+                    onMouseEnter={() => setHoveredIcon('theme')}
+                    onMouseLeave={() => setHoveredIcon(null)}
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={toggleTheme}
                     style={{
-                        width: '48px',
-                        height: '48px',
+                        position: 'relative',
+                        width: '40px',
+                        height: '40px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -1052,9 +1165,10 @@ export default function HomePage() {
                         cursor: 'pointer',
                         padding: 0
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = isDark ? 'white' : 'black'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = isDark ? '#9ca3af' : '#6b7280'}
                 >
+                    <AnimatePresence>
+                        {hoveredIcon === 'theme' && <Tooltip text={isDark ? "Light Mode" : "Dark Mode"} />}
+                    </AnimatePresence>
                     {isDark ? (
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="12" cy="12" r="5"></circle>
@@ -1072,8 +1186,8 @@ export default function HomePage() {
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                         </svg>
                     )}
-                </button>
-            </div>
+                </motion.button>
+            </motion.div>
         </div >
     );
 }
