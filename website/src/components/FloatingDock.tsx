@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from './ThemeContext';
 
 interface TooltipProps {
@@ -44,8 +44,35 @@ const Tooltip = ({ text }: TooltipProps) => (
 
 export default function FloatingDock() {
     const pathname = usePathname();
+    const router = useRouter();
     const { isDark, toggleTheme } = useTheme();
     const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
+
+    const handleHomeClick = () => {
+        if (pathname === '/') {
+            // Already on home page just scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            // Navigate to home and scroll to top
+            router.push('/');
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 100);
+        }
+    };
+
+    const handleProjectsClick = () => {
+        if (pathname === '/projects') {
+            // Already on projects page just scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            // Navigate to projects and scroll to top
+            router.push('/projects');
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 100);
+        }
+    };
 
     return (
         <motion.div
@@ -94,24 +121,28 @@ export default function FloatingDock() {
                 whileTap={{ scale: 0.95 }}
                 style={{ position: 'relative' }}
             >
-                <Link href="/" style={{
-                    backgroundColor: (pathname === "/" || hoveredIcon === "home") ? (isDark ? '#374151' : '#f3f4f6') : 'transparent',
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: (pathname === "/" && !isDark) ? '0 2px 4px rgba(0,0,0,0.05)' : 'none',
-                    color: (pathname === "/" || hoveredIcon === "home") ? (isDark ? 'white' : 'black') : (isDark ? '#9ca3af' : '#6b7280'),
-                    textDecoration: 'none',
-                    transition: 'all 0.2s ease'
-                }}>
+                <button
+                    onClick={handleHomeClick}
+                    style={{
+                        backgroundColor: (pathname === "/" || hoveredIcon === "home") ? (isDark ? '#374151' : '#f3f4f6') : 'transparent',
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: (pathname === "/" && !isDark) ? '0 2px 4px rgba(0,0,0,0.05)' : 'none',
+                        color: (pathname === "/" || hoveredIcon === "home") ? (isDark ? 'white' : 'black') : (isDark ? '#9ca3af' : '#6b7280'),
+                        transition: 'all 0.2s ease',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0
+                    }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                         <polyline points="9 22 9 12 15 12 15 22"></polyline>
                     </svg>
-                </Link>
+                </button>
                 <AnimatePresence>
                     {hoveredIcon === 'home' && <Tooltip text="Home" />}
                 </AnimatePresence>
@@ -129,25 +160,29 @@ export default function FloatingDock() {
                 whileTap={{ scale: 0.95 }}
                 style={{ position: 'relative' }}
             >
-                <Link href="/projects" style={{
-                    backgroundColor: (pathname === "/projects" || hoveredIcon === "projects") ? (isDark ? '#374151' : '#f3f4f6') : 'transparent',
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '8px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    boxShadow: (pathname === "/projects" && !isDark) ? '0 2px 4px rgba(0,0,0,0.05)' : 'none',
-                    color: (pathname === "/projects" || hoveredIcon === "projects") ? (isDark ? 'white' : 'black') : (isDark ? '#9ca3af' : '#6b7280'),
-                    transition: 'all 0.2s ease',
-                    textDecoration: 'none'
-                }}>
+                <button
+                    onClick={handleProjectsClick}
+                    style={{
+                        backgroundColor: (pathname === "/projects" || hoveredIcon === "projects") ? (isDark ? '#374151' : '#f3f4f6') : 'transparent',
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: (pathname === "/projects" && !isDark) ? '0 2px 4px rgba(0,0,0,0.05)' : 'none',
+                        color: (pathname === "/projects" || hoveredIcon === "projects") ? (isDark ? 'white' : 'black') : (isDark ? '#9ca3af' : '#6b7280'),
+                        transition: 'all 0.2s ease',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: 0
+                    }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                         <polyline points="9 10 11 12 9 14"></polyline>
                         <line x1="13" y1="14" x2="17" y2="14"></line>
                     </svg>
-                </Link>
+                </button>
                 <AnimatePresence>
                     {hoveredIcon === 'projects' && <Tooltip text="Projects" />}
                 </AnimatePresence>
