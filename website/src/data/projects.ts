@@ -14,6 +14,16 @@ export interface Project {
 
 export const projects: Project[] = [
     {
+        id: 'texify',
+        title: 'TeXify',
+        description: 'Convert handwritten math into polished LaTeX in seconds, without writing a single backslash.',
+        tags: ['React', 'AI', 'LaTeX'],
+        status: 'Building',
+        url: '',
+        github: 'https://github.com/kaificial/texify',
+        video: '/assets/ScribeAI.mp4'
+    },
+    {
         id: 'ratemyeats',
         title: 'RateMyEats',
         description: 'University dining hall rating platform for Canadian students',
@@ -31,15 +41,5 @@ export const projects: Project[] = [
         url: 'rooke.gg',
         icon: '♜',
         video: '/assets/Rooke.mp4'
-    },
-    {
-        id: 'texify',
-        title: 'TeXify',
-        description: 'Convert handwritten math into polished LaTeX in seconds, without writing a single backslash.',
-        tags: ['React', 'AI', 'LaTeX'],
-        status: 'Building',
-        url: '',
-        github: 'https://github.com/kaificial/texify',
-        video: '/assets/ScribeAI.mp4'
     }
 ];
