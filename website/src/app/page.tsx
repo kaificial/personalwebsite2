@@ -342,11 +342,11 @@ export default function HomePage() {
                 {/* Experience Items */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
                     {/* QMIND */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '24px' }}>
+                    <div className="experience-item" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <div className="experience-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '24px', flexWrap: 'wrap' }}>
                             <div style={{ display: 'flex', gap: '4px', alignItems: 'flex-start' }}>
                                 {/* QMIND Logo */}
-                                <div style={{ width: '64px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+                                <div className="experience-logo-container" style={{ width: '64px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
                                     <Image
                                         src="/assets/QMIND_logo.png"
                                         alt="QMIND Logo"
@@ -377,7 +377,7 @@ export default function HomePage() {
                                 </div>
                             </div>
 
-                            <span style={{
+                            <span className="experience-date" style={{
                                 fontSize: '0.875rem',
                                 color: isDark ? '#9ca3af' : '#6b7280',
                                 whiteSpace: 'nowrap'
@@ -387,6 +387,7 @@ export default function HomePage() {
                         </div>
 
                         <motion.button
+                            className="experience-btn"
                             onClick={() => toggleExpand('qmind')}
                             animate={{
                                 backgroundColor: isDark ? 'rgba(31, 41, 55, 0.4)' : '#ffffff',
@@ -413,8 +414,7 @@ export default function HomePage() {
                                 alignItems: 'center',
                                 gap: '4px',
                                 alignSelf: 'flex-start',
-                                fontWeight: '500',
-                                marginLeft: '68px' // Align with text
+                                fontWeight: '500'
                             }}
                         >
                             {expandedItems['qmind'] ? 'Show less' : 'Read more'}
@@ -476,19 +476,19 @@ export default function HomePage() {
                     </div>
 
                     {/* QAC */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '24px' }}>
+                    <div className="experience-item" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <div className="experience-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '24px', flexWrap: 'wrap' }}>
                             <div style={{ display: 'flex', gap: '4px', alignItems: 'flex-start' }}>
                                 {/* QAC Logo */}
-                                <div style={{ width: '64px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+                                <div className="experience-logo-container" style={{ width: '64px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
                                     <Image
                                         src="/assets/QAC_LOGO_CROP.png"
                                         alt="QAC Logo"
-                                        width={56}
-                                        height={56}
+                                        width={44}
+                                        height={44}
                                         style={{
                                             borderRadius: '8px',
-                                            objectFit: 'cover'
+                                            objectFit: 'contain'
                                         }}
                                     />
                                 </div>
@@ -511,7 +511,7 @@ export default function HomePage() {
                                 </div>
                             </div>
 
-                            <span style={{
+                            <span className="experience-date" style={{
                                 fontSize: '0.875rem',
                                 color: isDark ? '#9ca3af' : '#6b7280',
                                 whiteSpace: 'nowrap'
@@ -521,6 +521,7 @@ export default function HomePage() {
                         </div>
 
                         <motion.button
+                            className="experience-btn"
                             onClick={() => toggleExpand('qac')}
                             animate={{
                                 backgroundColor: isDark ? 'rgba(31, 41, 55, 0.4)' : '#ffffff',
@@ -547,8 +548,7 @@ export default function HomePage() {
                                 alignItems: 'center',
                                 gap: '4px',
                                 alignSelf: 'flex-start',
-                                fontWeight: '500',
-                                marginLeft: '68px' // Align with text
+                                fontWeight: '500'
                             }}
                         >
                             {expandedItems['qac'] ? 'Show less' : 'Read more'}
@@ -610,16 +610,16 @@ export default function HomePage() {
                     </div>
 
                     {/* QBiT */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '24px' }}>
+                    <div className="experience-item" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <div className="experience-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '24px', flexWrap: 'wrap' }}>
                             <div style={{ display: 'flex', gap: '4px', alignItems: 'flex-start' }}>
                                 {/* QBiT Logo */}
-                                <div style={{ width: '64px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+                                <div className="experience-logo-container" style={{ width: '64px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
                                     <Image
                                         src="/assets/QBiT_Logo-1.png"
                                         alt="QBiT Logo"
-                                        width={56}
-                                        height={56}
+                                        width={44}
+                                        height={44}
                                         style={{
                                             borderRadius: '8px',
                                             objectFit: 'cover',
@@ -646,7 +646,7 @@ export default function HomePage() {
                                 </div>
                             </div>
 
-                            <span style={{
+                            <span className="experience-date" style={{
                                 fontSize: '0.875rem',
                                 color: isDark ? '#9ca3af' : '#6b7280',
                                 whiteSpace: 'nowrap'
@@ -656,6 +656,7 @@ export default function HomePage() {
                         </div>
 
                         <motion.button
+                            className="experience-btn"
                             onClick={() => toggleExpand('qbit')}
                             animate={{
                                 backgroundColor: isDark ? 'rgba(31, 41, 55, 0.4)' : '#ffffff',
@@ -683,7 +684,6 @@ export default function HomePage() {
                                 gap: '4px',
                                 alignSelf: 'flex-start',
                                 fontWeight: '500',
-                                marginLeft: '68px', // Align with text
                                 marginTop: '-16px'
                             }}
                         >
@@ -1080,7 +1080,7 @@ export default function HomePage() {
 
                                 {/* Browser Body / Preview Area */}
                                 <div style={{
-                                    height: '400px',
+                                    height: 'clamp(280px, 50vw, 400px)',
                                     backgroundColor: (project as any).solidColor || (isDark ? '#171717' : '#f3f4f6'),
                                     display: 'flex',
                                     flexDirection: 'column',
