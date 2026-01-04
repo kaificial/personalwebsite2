@@ -162,7 +162,7 @@ export default function ProjectsPage() {
                     <motion.div
                         style={{
                             display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fill, minmax(450px, 1fr))',
+                            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 450px), 1fr))',
                             gap: '16px'
                         }}
                         initial={{ opacity: 0 }}
@@ -227,7 +227,7 @@ export default function ProjectsPage() {
 
                                             {/* Preview Area */}
                                             <div style={{
-                                                height: '420px',
+                                                height: 'clamp(280px, 50vw, 420px)',
                                                 backgroundColor: project.solidColor || (isDark ? '#171717' : '#f3f4f6'),
                                                 display: 'flex',
                                                 flexDirection: 'column',
@@ -447,7 +447,7 @@ export default function ProjectsPage() {
                     </motion.div>
                 </section>
 
-                <div style={{ height: '48px' }} />
+                <div style={{ height: '80px' }} />
                 <FloatingDock />
             </div>
         </div>
