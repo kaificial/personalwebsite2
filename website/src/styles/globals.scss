@@ -76,7 +76,11 @@ main {
     max-width: 660px;
     margin: 0 auto;
     padding: 1.5rem 0; // 24px
+    padding-bottom: 100px; // space for floating dock on iphone
 
+    @media (min-width: 768px) {
+        padding-bottom: 1.5rem;
+    }
 }
 
 // smooth transitions 
@@ -299,19 +303,25 @@ pre {
     border: 1px solid #1D4ED8 !important;
 }
 
-// Hero layout styling - two column layout on all screens
+// hero layout styling - stacked on ip[hone, 2 columns on larger screens
 .hero-layout {
     display: grid;
-    grid-template-columns: 1fr 0.8fr;
-    gap: 3rem;
-    align-items: start;
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+    align-items: center;
 
-    @media (min-width: 640px) {
+    @media (min-width: 560px) {
+        grid-template-columns: 1fr 0.8fr !important;
+        gap: 2rem;
+        align-items: start;
+    }
+
+    @media (min-width: 768px) {
         gap: 1.5rem;
     }
 
     @media (min-width: 1024px) {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr !important;
         gap: 3rem;
     }
 }
@@ -320,7 +330,6 @@ pre {
     text-align: left;
 }
 
-// Image placeholder styling
 .hero-image-container {
     display: flex;
     align-items: start;
@@ -342,7 +351,7 @@ pre {
     height: auto;
     aspect-ratio: 1 / 1;
     border-radius: 1rem;
-    // overflow: hidden; // Removed to allow tooltip to pop out
+    // overflow: hidden // removed to let tooltip pop out
     display: flex;
     align-items: center;
     justify-content: center;
@@ -366,4 +375,182 @@ pre {
     height: 100%;
     object-fit: cover;
     border-radius: 1rem;
+}
+
+// mobile responsive header 
+.header-container {
+    @media (max-width: 639px) {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+}
+
+.header-nav {
+    @media (max-width: 639px) {
+        display: none;
+    }
+
+    &.mobile-open {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 8px;
+        order: 3;
+
+        .nav-link {
+            width: 100%;
+            text-align: center;
+        }
+    }
+}
+
+.mobile-menu-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--bg-color);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    @media (max-width: 639px) {
+        display: flex;
+    }
+
+    &:hover {
+        transform: translateY(-1px);
+        border-color: rgba(0, 0, 0, 0.2);
+    }
+}
+
+.dark .mobile-menu-btn {
+    background-color: #121212;
+    border-color: rgba(255, 255, 255, 0.1);
+
+    &:hover {
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+}
+
+// mobile hero pic container
+.hero-image-container {
+    @media (max-width: 559px) {
+        justify-content: center;
+        min-height: auto;
+    }
+}
+
+// experience section mobile styles
+.experience-item {
+    @media (max-width: 559px) {
+        gap: 4px !important;
+
+        .experience-header {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+
+            // logo + text 
+            >div:first-child {
+                display: flex;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
+
+        // date 
+        .experience-date {
+            display: block;
+            margin-left: 52px !important;
+            margin-top: 0px;
+            font-size: 0.75rem !important;
+        }
+
+        // Logo container 
+        .experience-logo-container {
+            width: 44px !important;
+            min-width: 44px;
+            max-width: 44px;
+            flex-shrink: 0;
+            overflow: visible;
+
+            img {
+                width: 44px !important;
+                height: 44px !important;
+                max-width: none !important;
+            }
+        }
+    }
+
+    @media (max-width: 380px) {
+        .experience-logo-container {
+            width: 36px !important;
+            min-width: 36px;
+            max-width: 36px;
+
+            img {
+                width: 36px !important;
+                height: 36px !important;
+            }
+        }
+
+        .experience-date {
+            margin-left: 44px !important;
+        }
+    }
+}
+
+.experience-btn {
+    margin-left: 68px; // Default for desktop
+
+    @media (max-width: 559px) {
+        margin-left: 52px !important;
+        margin-top: 2px !important;
+    }
+
+    @media (max-width: 380px) {
+        margin-left: 44px !important;
+    }
+}
+
+// projects page on mobile
+.projects-container {
+    @media (max-width: 559px) {
+        padding: 0 8px;
+    }
+}
+
+// floating dock mobile 
+.floating-dock {
+    @media (max-width: 559px) {
+        padding: 4px !important;
+        gap: 2px !important;
+        bottom: 16px !important;
+        border-radius: 10px !important;
+        max-width: 95vw;
+
+        // smaller icon container sizes on mobile
+        button,
+        a {
+            width: 36px !important;
+            height: 36px !important;
+        }
+
+        // scale down SVG icons
+        svg {
+            width: 18px !important;
+            height: 18px !important;
+        }
+    }
+}
+
+// hide elements on mobile for compact bar
+.mobile-hide {
+    @media (max-width: 559px) {
+        display: none !important;
+    }
 }
