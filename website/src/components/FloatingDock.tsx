@@ -108,6 +108,7 @@ export default function FloatingDock() {
                 boxShadow: '0 10px 40px rgba(0, 0, 0, 0.25)',
                 zIndex: 1000
             }}
+            className="floating-dock"
         >
             {/* Home */}
             <motion.div
@@ -193,6 +194,7 @@ export default function FloatingDock() {
                     hidden: { opacity: 0, scale: 0.8 },
                     visible: { opacity: 1, scale: 1 }
                 }}
+                className="mobile-hide"
                 style={{ width: '1px', height: '20px', backgroundColor: isDark ? '#4b5563' : '#d1d5db', margin: '0 4px' }}
             />
 
@@ -233,11 +235,13 @@ export default function FloatingDock() {
                     hidden: { opacity: 0, scale: 0.8 },
                     visible: { opacity: 1, scale: 1 }
                 }}
+                className="mobile-hide"
                 style={{ width: '1px', height: '20px', backgroundColor: isDark ? '#4b5563' : '#d1d5db', margin: '0 4px' }}
             />
 
-            {/* Spotify */}
+            {/* hide spotify on mobile */}
             <motion.div
+                className="mobile-hide"
                 variants={{
                     hidden: { opacity: 0, scale: 0.8, y: 10 },
                     visible: { opacity: 1, scale: 1, y: 0 }
