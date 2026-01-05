@@ -683,8 +683,7 @@ export default function HomePage() {
                                 alignItems: 'center',
                                 gap: '4px',
                                 alignSelf: 'flex-start',
-                                fontWeight: '500',
-                                marginTop: '-16px'
+                                fontWeight: '500'
                             }}
                         >
                             {expandedItems['qbit'] ? 'Show less' : 'Read more'}
