@@ -1,5 +1,5 @@
 # personal portfolio site
-my personal website built with next.js to showcase my experience andwork to hopefully land a job 
+my personal website built with next.js to showcase my experience and work to hopefully land a job 
 
 ## running it locally
 
