@@ -341,6 +341,140 @@ export default function HomePage() {
 
                 {/* Experience Items */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+                    {/* PolicyEngine */}
+                    <div className="experience-item" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                        <div className="experience-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '24px', flexWrap: 'wrap' }}>
+                            <div style={{ display: 'flex', gap: '4px', alignItems: 'flex-start' }}>
+                                {/* PolicyEngine Logo */}
+                                <div className="experience-logo-container" style={{ width: '64px', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+                                    <Image
+                                        src="/assets/PE.png"
+                                        alt="PolicyEngine Logo"
+                                        width={44}
+                                        height={44}
+                                        style={{
+                                            borderRadius: '8px',
+                                            objectFit: 'cover'
+                                        }}
+                                    />
+                                </div>
+
+                                <div>
+                                    <h3 style={{
+                                        fontSize: '1rem',
+                                        fontWeight: '600',
+                                        marginBottom: '0px',
+                                        color: isDark ? 'white' : '#1c1917'
+                                    }}>
+                                        PolicyEngine
+                                    </h3>
+                                    <p style={{
+                                        fontSize: '0.875rem',
+                                        color: isDark ? '#9ca3af' : '#6b7280'
+                                    }}>
+                                        Software Developer
+                                    </p>
+                                </div>
+                            </div>
+
+                            <span className="experience-date" style={{
+                                fontSize: '0.875rem',
+                                color: isDark ? '#9ca3af' : '#6b7280',
+                                whiteSpace: 'nowrap'
+                            }}>
+                                Jan. 2026 - Present
+                            </span>
+                        </div>
+
+                        <motion.button
+                            className="experience-btn"
+                            onClick={() => toggleExpand('policyengine')}
+                            animate={{
+                                backgroundColor: isDark ? 'rgba(31, 41, 55, 0.4)' : '#ffffff',
+                                color: isDark ? '#d1d5db' : '#374151',
+                                borderColor: isDark ? '#374151' : '#e5e7eb',
+                            }}
+                            whileHover={{
+                                scale: 1.05,
+                                backgroundColor: isDark ? '#1E3A8A' : '#DBEAFE',
+                                color: isDark ? '#BFDBFE' : '#1E40AF',
+                                borderColor: isDark ? '#1D4ED8' : '#BFDBFE'
+                            }}
+                            whileTap={{ scale: 0.95 }}
+                            style={{
+                                border: `1px solid ${isDark ? '#374151' : '#e5e7eb'}`,
+                                background: isDark ? 'rgba(31, 41, 55, 0.4)' : '#ffffff',
+                                color: isDark ? '#d1d5db' : '#374151',
+                                fontSize: '0.75rem',
+                                cursor: 'pointer',
+                                padding: '5px 12px',
+                                borderRadius: '9999px',
+                                textAlign: 'left',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                alignSelf: 'flex-start',
+                                fontWeight: '500'
+                            }}
+                        >
+                            {expandedItems['policyengine'] ? 'Show less' : 'Read more'}
+                            <motion.svg
+                                width="12"
+                                height="12"
+                                viewBox="0 0 12 12"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                animate={{ rotate: expandedItems['policyengine'] ? 180 : 0 }}
+                            >
+                                <path d="M2 4l4 4 4-4" />
+                            </motion.svg>
+                        </motion.button>
+
+                        <AnimatePresence>
+                            {expandedItems['policyengine'] && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: 'auto', opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    style={{ overflow: 'hidden' }}
+                                >
+                                    <div style={{ marginLeft: '68px', marginTop: '4px', paddingBottom: '12px' }}>
+                                        <p style={{ fontSize: '0.875rem', color: isDark ? '#d1d5db' : '#4b5563', marginBottom: '12px' }}>
+                                            Building
+                                        </p>
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '4px', margin: '-4px' }}>
+                                            {['Python'].map((skill, index) => (
+                                                <motion.span
+                                                    key={index}
+                                                    whileHover={{ scale: 1.1, y: -2 }}
+                                                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                    style={{
+                                                        display: 'inline-block',
+                                                        cursor: 'default',
+                                                        padding: '4px 12px',
+                                                        backgroundColor: isDark ? '#1E3A8A' : '#DBEAFE',
+                                                        color: isDark ? '#BFDBFE' : '#1E40AF',
+                                                        border: `1px solid ${isDark ? '#1D4ED8' : '#BFDBFE'}`,
+                                                        borderRadius: '9999px',
+                                                        fontSize: '0.75rem',
+                                                        fontWeight: '500'
+                                                    }}
+                                                >
+                                                    {skill}
+                                                </motion.span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+
                     {/* QMIND */}
                     <div className="experience-item" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                         <div className="experience-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '24px', flexWrap: 'wrap' }}>
