@@ -87,10 +87,11 @@ Because Web Workers don't share memory with the main thread, the board state is 
         title: 'TeXify',
         description: 'Convert handwritten math into polished LaTeX in seconds, without writing a single backslash.',
         tags: ['React', 'AI', 'LaTeX'],
-        status: 'Building',
-        url: '',
+        status: 'Live',
+        url: 'https://texifylatex.vercel.app',
         github: 'https://github.com/kaificial/texify',
-        video: '/assets/ScribeAI.mp4'
+        demo: 'https://texifylatex.vercel.app',
+        video: '/assets/TeXify.mp4'
     },
 
 ];
