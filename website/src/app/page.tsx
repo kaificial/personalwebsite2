@@ -1213,8 +1213,9 @@ export default function HomePage() {
 
                                 {/* Browser Body / Preview Area */}
                                 <div style={{
-                                    height: 'clamp(280px, 50vw, 400px)',
-                                    backgroundColor: (project as any).solidColor || (isDark ? '#171717' : '#f3f4f6'),
+                                    height: project.video ? 'auto' : 'clamp(280px, 50vw, 400px)',
+                                    aspectRatio: project.video ? '16/9' : 'auto',
+                                    backgroundColor: project.solidColor || (isDark ? '#171717' : '#f3f4f6'),
                                     display: 'flex',
                                     flexDirection: 'column',
                                     alignItems: 'center',
@@ -1231,8 +1232,8 @@ export default function HomePage() {
                                             playsInline
                                             style={{
                                                 width: '100%',
-                                                height: '100%',
-                                                objectFit: 'cover'
+                                                height: 'auto',
+                                                display: 'block'
                                             }}
                                         />
                                     ) : (
@@ -1304,7 +1305,9 @@ export default function HomePage() {
 
                                     <div style={{ display: 'flex', gap: '12px' }}>
                                         <motion.a
-                                            href="#"
+                                            href={project.demo || '#'}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
                                             style={{
