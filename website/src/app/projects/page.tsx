@@ -7,10 +7,19 @@ import { SpotlightCard } from '../../components/SpotlightCard';
 import FloatingDock from '../../components/FloatingDock';
 import Link from 'next/link';
 import { useState } from 'react';
+import { ProjectDescription } from '../../components/ProjectDescription';
 
 export default function ProjectsPage() {
     const { isDark } = useTheme();
     const [searchQuery, setSearchQuery] = useState('');
+    const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+
+    const toggleExpand = (id: string) => {
+        setExpandedItems(prev => ({
+            ...prev,
+            [id]: !prev[id]
+        }));
+    };
 
     const { scrollYProgress } = useScroll();
     const scaleX = useSpring(scrollYProgress, {
@@ -272,13 +281,82 @@ export default function ProjectsPage() {
                                                 color: isDark ? '#9ca3af' : '#6b7280',
                                                 marginBottom: '16px',
                                                 lineHeight: '1.5',
-                                                display: '-webkit-box',
-                                                WebkitLineClamp: 3,
+                                                display: expandedItems[project.id] ? 'block' : '-webkit-box',
+                                                WebkitLineClamp: expandedItems[project.id] ? 'none' : 3,
                                                 WebkitBoxOrient: 'vertical',
-                                                overflow: 'hidden'
+                                                overflow: expandedItems[project.id] ? 'visible' : 'hidden'
                                             }}>
                                                 {project.description}
                                             </p>
+
+                                            {project.longDescription && (
+                                                <>
+                                                    <AnimatePresence>
+                                                        {expandedItems[project.id] && (
+                                                            <motion.div
+                                                                initial={{ height: 0, opacity: 0 }}
+                                                                animate={{ height: 'auto', opacity: 1 }}
+                                                                exit={{ height: 0, opacity: 0 }}
+                                                                transition={{ duration: 0.2 }}
+                                                                style={{ overflow: 'hidden' }}
+                                                            >
+                                                                <ProjectDescription content={project.longDescription || ''} />
+                                                            </motion.div>
+                                                        )}
+                                                    </AnimatePresence>
+
+                                                    <motion.button
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            toggleExpand(project.id);
+                                                        }}
+                                                        animate={{
+                                                            backgroundColor: isDark ? 'rgba(31, 41, 55, 0.4)' : '#ffffff',
+                                                            color: isDark ? '#d1d5db' : '#374151',
+                                                            borderColor: isDark ? '#374151' : '#e5e7eb',
+                                                        }}
+                                                        whileHover={{
+                                                            scale: 1.05,
+                                                            backgroundColor: isDark ? '#1E3A8A' : '#DBEAFE',
+                                                            color: isDark ? '#BFDBFE' : '#1E40AF',
+                                                            borderColor: isDark ? '#1D4ED8' : '#BFDBFE'
+                                                        }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                        style={{
+                                                            border: `1px solid ${isDark ? '#374151' : '#e5e7eb'}`,
+                                                            background: isDark ? 'rgba(31, 41, 55, 0.4)' : '#ffffff',
+                                                            color: isDark ? '#d1d5db' : '#374151',
+                                                            fontSize: '0.75rem',
+                                                            cursor: 'pointer',
+                                                            padding: '5px 12px',
+                                                            borderRadius: '9999px',
+                                                            textAlign: 'left',
+                                                            display: 'inline-flex',
+                                                            alignItems: 'center',
+                                                            gap: '4px',
+                                                            alignSelf: 'flex-start',
+                                                            fontWeight: '500',
+                                                            marginBottom: '24px',
+                                                            outline: 'none'
+                                                        }}
+                                                    >
+                                                        {expandedItems[project.id] ? 'Show less' : 'Read more'}
+                                                        <motion.svg
+                                                            width="12"
+                                                            height="12"
+                                                            viewBox="0 0 12 12"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            strokeWidth="1.5"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            animate={{ rotate: expandedItems[project.id] ? 180 : 0 }}
+                                                        >
+                                                            <path d="M2 4l4 4 4-4" />
+                                                        </motion.svg>
+                                                    </motion.button>
+                                                </>
+                                            )}
 
                                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
                                                 {project.tags.map((tech, i) => (

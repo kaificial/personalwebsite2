@@ -8,6 +8,7 @@ import { useTheme } from '../components/ThemeContext';
 import { SpotlightCard } from '../components/SpotlightCard';
 import { projects } from '../data/projects';
 import FloatingDock from '../components/FloatingDock';
+import { ProjectDescription } from '../components/ProjectDescription';
 import { motion, AnimatePresence, useScroll, useSpring, useMotionValue, useMotionTemplate } from 'framer-motion';
 
 export default function HomePage() {
@@ -1266,8 +1267,73 @@ export default function HomePage() {
                                     {project.description}
                                 </p>
 
+                                {project.longDescription && (
+                                    <>
+                                        <AnimatePresence>
+                                            {expandedItems[project.id] && (
+                                                <motion.div
+                                                    initial={{ height: 0, opacity: 0 }}
+                                                    animate={{ height: 'auto', opacity: 1 }}
+                                                    exit={{ height: 0, opacity: 0 }}
+                                                    transition={{ duration: 0.2 }}
+                                                    style={{ overflow: 'hidden' }}
+                                                >
+                                                    <ProjectDescription content={project.longDescription || ''} />
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+
+                                        <motion.button
+                                            onClick={() => toggleExpand(project.id)}
+                                            animate={{
+                                                backgroundColor: isDark ? 'rgba(31, 41, 55, 0.4)' : '#ffffff',
+                                                color: isDark ? '#d1d5db' : '#374151',
+                                                borderColor: isDark ? '#374151' : '#e5e7eb',
+                                            }}
+                                            whileHover={{
+                                                scale: 1.05,
+                                                backgroundColor: isDark ? '#1E3A8A' : '#DBEAFE',
+                                                color: isDark ? '#BFDBFE' : '#1E40AF',
+                                                borderColor: isDark ? '#1D4ED8' : '#BFDBFE'
+                                            }}
+                                            whileTap={{ scale: 0.95 }}
+                                            style={{
+                                                border: `1px solid ${isDark ? '#374151' : '#e5e7eb'}`,
+                                                background: isDark ? 'rgba(31, 41, 55, 0.4)' : '#ffffff',
+                                                color: isDark ? '#d1d5db' : '#374151',
+                                                fontSize: '0.75rem',
+                                                cursor: 'pointer',
+                                                padding: '5px 12px',
+                                                borderRadius: '9999px',
+                                                textAlign: 'left',
+                                                display: 'inline-flex',
+                                                alignItems: 'center',
+                                                gap: '4px',
+                                                alignSelf: 'flex-start',
+                                                fontWeight: '500',
+                                                marginBottom: '24px' // increased spacing before tech stack
+                                            }}
+                                        >
+                                            {expandedItems[project.id] ? 'Show less' : 'Read more'}
+                                            <motion.svg
+                                                width="12"
+                                                height="12"
+                                                viewBox="0 0 12 12"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                strokeWidth="1.5"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                animate={{ rotate: expandedItems[project.id] ? 180 : 0 }}
+                                            >
+                                                <path d="M2 4l4 4 4-4" />
+                                            </motion.svg>
+                                        </motion.button>
+                                    </>
+                                )}
+
                                 {/* Tech Stack */}
-                                <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '24px' }}>
                                     {project.tags.map((tech, i) => (
                                         <motion.span
                                             key={i}
